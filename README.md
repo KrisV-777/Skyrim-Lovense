@@ -1,7 +1,8 @@
-# SkyrimLovense
+# SkyrimLovense ([Nexus Mods Mirror](https://www.nexusmods.com/skyrimspecialedition/mods/133698))
 
 Lovense API for TES5 Skyrim, which allows authors to control Lovense Toys through Papyrus Scripts.
 
+Usage instructions for users can be found on the [Nexus Page](https://www.nexusmods.com/skyrimspecialedition/mods/133698).  
 The Papyrus API, which includes all documentation, can be found [here](https://github.com/KrisV-777/Skyrim-Lovense/blob/main/dist/Source/Scripts/Lovense.psc).
 
 ## Requirements
