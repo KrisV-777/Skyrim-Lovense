@@ -1,7 +1,8 @@
 # SkyrimLovense
 
-Lovense API for TES5 Skyrim
+Lovense API for TES5 Skyrim, which allows authors to control Lovense Toys through Papyrus Scripts.
 
+The Papyrus API, which includes all documentation, can be found [here](https://github.com/KrisV-777/Skyrim-Lovense/blob/main/dist/Source/Scripts/Lovense.psc).
 
 ## Requirements
 * [CMake](https://cmake.org/)
