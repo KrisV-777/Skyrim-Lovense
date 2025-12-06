@@ -5,9 +5,9 @@ PROJECT_NAME = "SkyrimLovense"
 
 -- Project
 set_project(PROJECT_NAME)
-set_version("0.1.0")
+set_version("1.0.0")
 set_languages("cxx23")
-set_license("Apache-2.0")
+set_license("apache-2.0")
 set_warnings("allextra", "error")
 
 -- Options
@@ -28,7 +28,6 @@ set_policy("package.requires_lock", true)
 -- rules
 add_rules("mode.debug", "mode.release")
 
-add_defines("XMAKE")
 if is_mode("debug") then
     add_defines("DEBUG")
     set_optimize("none")
@@ -52,7 +51,7 @@ target(PROJECT_NAME)
     add_deps("commonlibsse-ng")
     add_rules("commonlibsse-ng.plugin", {
         name = PROJECT_NAME,
-        author = "Scrab Joséline",
+        author = "KrisV777",
         description = "API to interact with Lovense Toys through Papyrus"
     })
 
@@ -94,10 +93,10 @@ target(PROJECT_NAME)
     after_build(function (target)
         local mod_folder = os.getenv("XSE_TES5_MODS_PATH")
         local game_folder = os.getenv("XSE_TES5_GAME_PATH")
-        if game_folder then
+        if game_folder and mod_folder then
             local compiler_folder = path.join(game_folder, "Papyrus Compiler/PapyrusCompiler.exe")
-            local script_source = "dist/source/scripts"
-            local script_output = "dist/scripts"
+            local script_source = "dist/Source/Scripts"
+            local script_output = "dist/Scripts"
             local flags_file = path.join(game_folder, "Data/Source/Scripts/TESV_Papyrus_Flags.flg")
             os.execv(compiler_folder, { script_source, 
                 "-i=" .. script_source .. ";" .. path.join(game_folder, "Data/Source/Scripts"),
@@ -110,7 +109,6 @@ target(PROJECT_NAME)
             end
             os.cp(target:targetfile(), plugin_folder)
             os.cp(target:symbolfile(), plugin_folder)
-
             if (is_mode("release")) then
                 local release_folder = path.join(os.projectdir(), ".release")
                 local zipfile = path.join(release_folder, target:basename() .. "-" .. target:version() .. ".7z")
@@ -123,11 +121,17 @@ target(PROJECT_NAME)
         else
             print("Warning: GamePath not defined. Skipping script compilation.")
         end
-        if mod_folder and has_config("copy_to_papyrus") then
+        if not has_config("copy_to_papyrus") then
+            -- do nothing
+        elseif mod_folder then
             local SkyrimPath = path.join(mod_folder, target:basename())
+            if not os.isdir(SkyrimPath) then
+                os.mkdir(SkyrimPath)
+            end
             os.cp("dist/*", SkyrimPath)
         else
             print("Warning: SkyrimPath not defined. Skipping post-build copy.")
         end
+        print("Build finished. Skyrim V" .. (get_config("skyrim_ae") and "1.6" or "1.5"))
     end)
 target_end()

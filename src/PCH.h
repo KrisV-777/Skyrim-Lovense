@@ -6,13 +6,13 @@
 #include "SKSE/SKSE.h"
 #pragma warning(pop)
 
-#include <nlohmann/json.hpp>
 #include <magic_enum.hpp>
+#include <nlohmann/json.hpp>
 static_assert(magic_enum::is_magic_enum_supported);
 
 #pragma warning(push)
-#include <spdlog/sinks/msvc_sink.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/msvc_sink.h>
 #pragma warning(pop)
 
 namespace logger = SKSE::log;
@@ -34,7 +34,7 @@ using json = nlohmann::json;
 namespace stl
 {
 	using namespace SKSE::stl;
-	
+
 	inline bool read_string(SKSE::SerializationInterface* a_intfc, std::string& a_str)
 	{
 		std::size_t size = 0;
@@ -76,6 +76,3 @@ struct std::formatter<RE::BSFixedString> : std::formatter<const char*>
 };
 
 #define DLLEXPORT __declspec(dllexport)
-#ifndef XMAKE
-#include "Plugin.h"
-#endif

@@ -14,40 +14,12 @@ static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
 	}
 }
 
-#ifndef XMAKE
-#ifdef SKYRIM_SUPPORT_AE
-extern "C" DLLEXPORT constinit auto SKSEPlugin_Version = []() {
-	SKSE::PluginVersionData v;
-	v.PluginVersion(Plugin::VERSION);
-	v.PluginName(Plugin::NAME);
-	v.AuthorName("Scrab Joséline"sv);
-	v.UsesAddressLibrary();
-	v.UsesUpdatedStructs();
-	v.CompatibleVersions({ SKSE::RUNTIME_LATEST });
-	// v.CompatibleVersions({ SKSE::RUNTIME_1_6_353 });
-	return v;
-}();
-#else
-extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface*, SKSE::PluginInfo* a_info)
-{
-	a_info->infoVersion = SKSE::PluginInfo::kVersion;
-	a_info->name = Plugin::NAME.data();
-	a_info->version = Plugin::VERSION.pack();
-	return true;
-}
-#endif
-#endif
-
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
-#ifndef XMAKE
-	const auto project_name = Plugin::NAME;
-	const auto project_version = Plugin::VERSION;
-#else
 	const auto plugin = SKSE::PluginDeclaration::GetSingleton();
 	const auto project_name = plugin->GetName();
 	const auto project_version = plugin->GetVersion();
-#endif
+
 	const auto InitLogger = [&]() -> bool {
 #ifndef NDEBUG
 		auto sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
@@ -97,8 +69,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	papyrus->Register(Papyrus::Register);
 	const auto msging = SKSE::GetMessagingInterface();
 	if (!msging->RegisterListener("SKSE", SKSEMessageHandler)) {
-	 	logger::critical("Failed to register Listener");
-	 	return false;
+		logger::critical("Failed to register Listener");
+		return false;
 	}
 	if (REL::Module::GetRuntime() != REL::Module::Runtime::VR)
 		Interface::LovenseMenu::Register();
